@@ -42,6 +42,7 @@ public class TicTacToe {
             case 0:
                 moves = loadMoves(args[i]);
                 for(Move mv : moves){
+                    System.out.println(mv.location + " " + mv.symbol);
                 }
                 break;
 
@@ -59,6 +60,7 @@ public class TicTacToe {
             System.exit(-1);
         }
         // Teach the AI program using the data
+        System.out.println("Finished without errors");
     }
 
     private static List<Move> loadMoves(String filename) {
@@ -77,14 +79,25 @@ public class TicTacToe {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            String split[] = move.split("\\s+");
-            Symbol sym = (parseSymbol(split[0]));
-            int locations = parseInt(split[1]);
-            Move movess = new Move();
-            movess.symbol = sym;
-            movess.location = locations;
-            moves.add(movess);
-        }
+            if(move.length() <= 3 ) {
+                String split[] = move.split("\\s+");
+                Symbol sym = null;
+                int locations = 0;
+                try {
+                    sym = (parseSymbol(split[0]));
+                    locations = parseInt(split[1]);
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    System.err.println("Not a correct file format");
+                }
+                Move movess = new Move();
+                movess.symbol = sym;
+                movess.location = locations;
+                moves.add(movess);
+            }
+            else {
+                System.err.println("To many characters on the line");
+            }
+            }
         return moves;
     }
 
