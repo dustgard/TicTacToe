@@ -1,0 +1,39 @@
+<project name="TicTacToe" default="compile" basedir=".">
+  <!-- set global properties for this build -->
+  <property name="src" location="src"/>
+  <property name="dist" location="dist"/>
+  <presetdef name="javac">
+    <javac includeantruntime="false" debug="true"/>
+  </presetdef>
+
+  <target name="init">
+    <mkdir dir="${dist}"/>
+    <mkdir dir="${dist}/classes"/>
+  </target>
+
+  <target name="compile" depends="init">
+    <javac debug="true" srcdir="${src}" destdir="${dist}/classes"/>
+  </target>
+
+  <target name="jar" depends="init,compile">
+    <jar destfile="${dist}/${ant.project.name}.jar" basedir="${dist}/classes">
+      <manifest>
+        <attribute name="Main-Class" value="${ant.project.name}"/>
+      </manifest>
+    </jar>
+  </target>
+
+  <target name="movesarg" unless="moves">
+    <property name="moves" value="${basedir}/src/moves.txt"/>
+  </target>
+
+  <target name="run" depends="jar,movesarg">
+    <java jar="${dist}/${ant.project.name}.jar" fork="true">
+      <arg value="${moves}"/>
+    </java>
+  </target>
+
+  <target name="clean">
+    <delete dir="${dist}"/>
+  </target>
+</project>
